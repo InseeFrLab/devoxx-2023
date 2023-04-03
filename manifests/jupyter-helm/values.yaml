@@ -1,0 +1,14 @@
+serviceAccount:
+  name: default
+password: changeme
+service:
+  openshiftRoute:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations: {}
+    hosts:
+      - host: devoxx.insee.io
+        paths:
+          - /
+    tls: []

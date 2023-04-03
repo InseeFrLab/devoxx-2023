@@ -1,0 +1,5 @@
+ingress-nginx:
+  controller:
+    watchIngressWithoutClass: true
+  rbac:
+    create: true

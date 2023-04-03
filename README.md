@@ -19,25 +19,66 @@ Overview des options, cloud vs on-premise, distributions ...
 
 ## Prise en main "admin" du cluster  
 
-Rappel de l'architecture, de la façon de gérer un cluster Kubernetes
-`live` : Installation de `kubectl`, téléchargement du `kubeconfig`, `kubectl get nodes`  
+### `Théorie`  
+![](img/architecture.png)  
+Rappel de l'architecture, de la façon de gérer un cluster Kubernetes  
+### `Pratique`  
+* Installation de `kubectl` (https://kubernetes.io/docs/tasks/tools/), attention au [Version skew policy](https://kubernetes.io/releases/version-skew-policy/) : respecter `+/- 1` par rapport au cluster pour éviter les problèmes. Le mettre dans le `PATH`.  
+* Téléchargement du `kubeconfig` depuis l'interface du provider (ou récupération en fonction de la distribution), le placer dans `~/.kube/config`  
+* Confirmer avec `kubectl get nodes` la présence des noeuds  
 
 ## Datascience 101 : déploiement d'un service  
-
+### `Théorie`  
 Approche brute, technique, non multi-users  
-`live` : Déploiement d'un `jupyter` à partir de contrats kube préparés. `kubectl port-forward` pour y accéder  
+### `Pratique`  
+* Déploiement d'un jupyter notebook basique. `kubectl apply -f manifests/jupyter-basique`  
+* `kubectl get pods` pour suivre la création du pod  
+* `kubectl logs podname` une fois `Running` pour consulter les logs et récupérer le token d'accès (on ne l'a pas précisé donc il est généré dynamiquement à chaque lancement)  
+* `kubectl port-forward podname 8888:8888` pour ouvrir un tunnel entre `localhost:8888` et le port 8888 du Jupyter  
+* Accès et utilisation du Jupyter via `localhost:8888`  
+
+Superbe infra datascience :thumbsup:
 
 ## Packaging, reproductibilité et configuration : Helm
 
+### `Théorie`  
 Intérêt du packaging, principes de Helm  
-`live` :  Désinstallation et réinstallation du service précédent
+### `Pratique`
+Désinstallation et réinstallation du service précédent  
+* `kubectl delete -f manifests/jupyter-basique` pour nettoyer le service précédent  
+* Recherche d'un `chart` Helm pour jupyterlab ...  
+* https://artifacthub.io/packages/helm/dsri-helm-charts/jupyterlab  
+```
+helm repo add dsri https://maastrichtu-ids.github.io/dsri-helm-charts/
+helm repo update  
+helm install jupyterlab dsri/jupyterlab \
+  --set storage.enabled=false \
+  --set serviceAccount.name=default \
+  --set service.openshiftRoute.enabled=false \
+  --set password=changeme
+```  
+* Bonne pratique : Utiliser `helm template` AVANT d'installer pour contrôler ce qui va être installé. (à défaut, `helm get manifest <releasename>` pour voir les manifests après installation)
+* Bonne pratique : Externaliser les values dans un `values.yaml` (`helm install -f values.yaml`)  
 
 ## Exposition des services vers l'extérieur
 
-Enjeux d'un reverse proxy
-`live` : Installation de `nginx-ingress` via un `values.yaml`. Accès via l'IP / URL loadbalancer.  
+### `Théorie`  
+Enjeux d'un reverse proxy  
+
+### `Pratique`  
+
+* `cd manifests/ingress-nginx`, `helm dependencies build` pour télécharger les dépendances (`helm dependencies update` pour les mettre à jour)  
+* `helm template ingress-nginx . -f values.yaml` pour prévisualisation
+* `helm install ingress-nginx . -f values.yaml` pour l'installation  
+* `kubectl get pods` pour suivre l'avancée des pods, `kubectl get service` pour suivre l'affectation de l'IP loadbalancer  
+* Récupérer l'IP externe (après affectation par le cloud provider)
+
+### `Théorie`  
 Rappels DNS / HTTPS  
-`live` : Configuration d'un DNS `*` et certificat correspondant, accès au jupyter.  
+### `Pratique`  
+* Configuration d'un champ DNS `A` `*.devoxx.insee.io` => `ipexterne`.
+* TODO : certificat  
+* Accéder au jupyter notebook
 
 ## Bilan d'étape  
 
