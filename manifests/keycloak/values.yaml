@@ -1,0 +1,8 @@
+keycloakx:
+  ingress:
+    enabled: true
+    rules:
+      - host: auth.devoxx.insee.io
+    tls:
+      - hosts:
+          - auth.devoxx.insee.io

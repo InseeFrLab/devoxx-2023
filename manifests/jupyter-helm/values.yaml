@@ -1,14 +1,8 @@
-serviceAccount:
-  name: default
-password: changeme
-service:
-  openshiftRoute:
-    enabled: false
+jupyter:
   ingress:
     enabled: true
-    annotations: {}
-    hosts:
-      - host: devoxx.insee.io
-        paths:
-          - /
-    tls: []
+    rules:
+      - host: jupyter.devoxx.insee.io
+    tls:
+      - hosts:
+          - jupyter.devoxx.insee.io

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: jupyter
+version: 1.0.0
+dependencies:
+  - name: jupyter-python
+    version: 1.10.1
+    repository: https://inseefrlab.github.io/helm-charts-interactive-services

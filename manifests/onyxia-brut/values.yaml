@@ -1,0 +1,8 @@
+onyxia:
+  ingress:
+    enabled: true
+    hosts:
+      - host: datalab.devoxx.insee.io
+    tls:
+      - hosts:
+          - datalab.devoxx.insee.io
