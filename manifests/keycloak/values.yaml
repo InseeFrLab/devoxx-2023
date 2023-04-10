@@ -2,7 +2,10 @@ keycloakx:
   ingress:
     enabled: true
     rules:
-      - host: auth.devoxx.insee.io
+      - host: testdevoxx.lab.sspcloud.fr
+        paths:
+          - path: /
+            pathType: Prefix
     tls:
       - hosts:
-          - auth.devoxx.insee.io
+          - testdevoxx.lab.sspcloud.fr

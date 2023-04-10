@@ -1,0 +1,39 @@
+minio:
+  persistence:
+    size: 1Gi
+  ingress:
+    enabled: true
+    rules:
+      - host: minio.devoxx.insee.io
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - minio.devoxx.insee.io
+  consoleIngress:
+    enabled: true
+    rules:
+      - host: minio-console.devoxx.insee.io
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - minio-console.devoxx.insee.io
+  oidc:
+    enabled: true
+    configUrl: "https://auth.devoxx.insee.io/.well-known/openid-configuration"
+    clientId: "minio"
+    clientSecret: ""
+    claimName: "policy"
+    scopes: "openid,profile,email"
+    redirectUri: "https://minio-console.devoxx.insee.io/oauth_callback"
+  policies:
+    - name: stsonly
+      statements:
+        - resources:
+            - "arn:aws:s3:::oidc-${jwt:preferred_username}"
+            - "arn:aws:s3:::oidc-${jwt:preferred_username}/*"
+          actions:
+            - "s3:*"

@@ -1,12 +1,8 @@
 # Construisons ensemble de A à Z un cloud opensource pour le datascientist
 
-## Objectif
+## Contexte et objectif
 
-Construire une plateforme opensource multi utilisateurs pour datascientists.  
-Libre service stat (VSCode, Jupyter, RStudio ...), données (postgres ...) et orchestration (road to production).
-UX simple + power-users.  
-Explicitation : on veut construire un cloud opensource agnostic d'un provider. Alternative : utiliser des services managés de datascience.  
-Présentation du plan d'action (n étapes)
+Fred : présentation du contexte
 
 ## Socle : Kubernetes
 
@@ -14,15 +10,23 @@ Importance de la conteneurisation
 
 ## Provisionner un cluster kube
 
-Overview des options, cloud vs on-premise, distributions ...  
-`live` : provisionning d'un cluster Kubernetes managé
+### `Théorie`
+
+- Un prérequis : un cluster Kubernetes.
+- "Agnostique de la distribution / cloud provider"
+- Aujourd'hui : cluster managé chez OVH
+
+### `Pratique`
+
+- Création d'un cluster Kubernetes sur OVH
 
 ## Prise en main "admin" du cluster
 
 ### `Théorie`
 
-![](img/architecture.png)  
-Rappel de l'architecture, de la façon de gérer un cluster Kubernetes
+![](img/architecture.png)
+
+- Interaction avec l'API Server
 
 ### `Pratique`
 
@@ -34,7 +38,7 @@ Rappel de l'architecture, de la façon de gérer un cluster Kubernetes
 
 ### `Théorie`
 
-Approche brute, technique, non multi-users
+- On a un cluster, on déploie et c'est fini, non ?
 
 ### `Pratique`
 
@@ -68,7 +72,7 @@ helm install jupyter helm-charts-interactive-services/jupyter-python
 
 - Pratique : faire un `chart` "coquille" avec une dépendance vers le `chart` réel (cf `manifests/jupyter-helm`)
 - Bonne pratique : Utiliser `helm template` AVANT d'installer pour contrôler ce qui va être installé. (à défaut, `helm get manifest <releasename>` pour voir les manifests après installation)
-- Bonne pratique : Externaliser les values dans un `values.yaml` (`helm install -f values.yaml`)  
+- Bonne pratique : Externaliser les values dans un `values.yaml` (`helm install -f values.yaml`)
 - Bonne pratique : `helm uninstall jupyter`
 
 ## Exposition des services vers l'extérieur
@@ -109,6 +113,10 @@ Certificat TLS : wildcard vs cert-manager
 On a un cluster, accessible aux admins avec possibilité de déployer des services de façon technique.  
 **Nécessité d'industrialisation et de proposer une UX**
 
+## Onyxia, notre sauveur
+
+Jo : vidéo + présentation de l'appli + démo sspcloud
+
 ## Installation d'Onyxia
 
 ### `Théorie`
@@ -127,7 +135,8 @@ Intérêt, fonctionnement
 
 ### `Théorie`
 
-Rappels OIDC, présentation de keycloak
+OIDC, présentation de keycloak
+![](img/oidc.jpeg)
 
 ### `Pratique`
 
@@ -137,7 +146,7 @@ Installation et paramétrage de keycloak, onyxia avec authentification
 
 ### `Théorie`
 
-Intérêt S3, enjeux on-premise vs S3 managé
+- Fred : intérêt du stockage S3
 
 ### `Pratique`
 
@@ -147,7 +156,7 @@ Installation minIO et utilisation dans Onyxia
 
 ### `Théorie`
 
-Fonctionnement du catalogue, faire un catalogue maison
+- Jo : fonctionnement du catalogue
 
 ### `Pratique`
 
