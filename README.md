@@ -67,7 +67,7 @@ Superbe infra datascience :thumbsup:
 
 ### `Théorie`
 
-Intérêt du packaging, principes de Helm
+Intérêt du packaging, principes de [Helm](https://helm.sh/)
 
 ### `Pratique`
 
@@ -232,5 +232,6 @@ https://www.keycloakify.dev/
 
 ## Bonus
 
+- [Catalogue de formations](https://www.sspcloud.fr/formation)
 - [Gitops avec argocd](https://argo-cd.readthedocs.io/en/stable/)
 - [Monitoring / billing](https://github.com/opencost/opencost)
