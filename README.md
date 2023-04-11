@@ -4,15 +4,11 @@
 
 Fred : présentation du contexte
 
-## Socle : Kubernetes
-
-Importance de la conteneurisation
-
 ## Provisionner un cluster kube
 
 ### `Théorie`
 
-- Un prérequis : un cluster Kubernetes.
+- Un prérequis : un cluster Kubernetes
 - "Agnostique de la distribution / cloud provider"
 - Aujourd'hui : cluster managé chez OVH
 
@@ -24,7 +20,7 @@ Importance de la conteneurisation
 
 ### `Théorie`
 
-![](img/architecture.png)
+![](img/kube.png)
 
 - Interaction avec l'API Server
 
@@ -79,33 +75,35 @@ helm install jupyter helm-charts-interactive-services/jupyter-python
 
 ### `Théorie`
 
-Enjeux d'un reverse proxy
+![](img/reverse-proxy.png)
 
 ### `Pratique`
 
 - `cd manifests/ingress-nginx`, `helm dependencies build` pour télécharger les dépendances (`helm dependencies update` pour les mettre à jour)
-- `helm template ingress-nginx . -f values.yaml` pour prévisualisation
-- `helm install ingress-nginx . -f values.yaml` pour l'installation
-- `kubectl get pods` pour suivre l'avancée des pods, `kubectl get service` pour suivre l'affectation de l'IP loadbalancer
+- `kubectl create namespace ingress-nginx`
+- `helm template ingress-nginx . -f values.yaml -n ingress-nginx` pour prévisualisation
+- `helm install ingress-nginx . -f values.yaml -n ingress-nginx` pour l'installation
+- `kubectl get pods -n ingress-nginx` pour suivre l'avancée des pods, `kubectl get service -n ingress-nginx` pour suivre l'affectation de l'IP loadbalancer
 - Récupérer l'IP externe (après affectation par le cloud provider)
 
 ### `Théorie`
 
-Rappels DNS / HTTPS
+Une adresse IP c'est bien, un nom de domaine c'est mieux
 
 ### `Pratique`
 
 - Configuration d'un champ DNS `A` `*.devoxx.insee.io` => `ipexterne`
-- Modifier le jupyter pour utiliser le reverse proxy (ingress)
+- Modifier le jupyter pour utiliser le reverse proxy (`helm upgrade jupyter helm-charts-interactive-services/jupyter-python --set ingress.enabled=true --set ingress.hostname=devoxx.insee.io`)
 
 ### `Théorie`
 
-Certificat TLS : wildcard vs cert-manager
+- `HTTP` brut en 2023 :vomit:
+- 2 approches : `cert-manager` et `wildcard`
 
 ### `Pratique`
 
-- Wildcard : `certbot certonly --manual --preferred-challenges dns`
-- `kubectl create secret tls wildcard --key privkey.pem --cert cert.pem`
+- Wildcard (via [let's encrypt](https://letsencrypt.org/)) : `certbot certonly --manual --preferred-challenges dns`
+- `kubectl create secret tls wildcard --key privkey.pem --cert fullchain.pem -n ingress-nginx`
 - Ou cert-manager : https://cert-manager.io/docs/installation/helm/
 
 ## Bilan d'étape
@@ -115,49 +113,95 @@ On a un cluster, accessible aux admins avec possibilité de déployer des servic
 
 ## Onyxia, notre sauveur
 
-Jo : vidéo + présentation de l'appli + démo sspcloud
+Vidéo + présentation de l'appli + démo sspcloud (J)
 
 ## Installation d'Onyxia
 
 ### `Théorie`
 
-Intérêt, fonctionnement
+- https://www.onyxia.sh/
+- Pattern "namespace as a service"
 
 ### `Pratique`
 
-- https://www.onyxia.sh/
-
-* `cd manifests/onyxia-brut`, `helm dependencies update`, `helm install onyxia . -f values.yaml`
-* ...
-* `https://datalab.devoxx.insee.io`
+- `cd manifests/onyxia-brut`, `helm dependencies build`, `helm install onyxia . -f values.yaml -n onyxia --create-namespace`
+- ...
+- `https://datalab.devoxx.insee.io`
 
 ## Multi users : authentification
 
 ### `Théorie`
 
-OIDC, présentation de keycloak
 ![](img/oidc.jpeg)
 
 ### `Pratique`
 
-Installation et paramétrage de keycloak, onyxia avec authentification
+Installation d'un [Keycloak](https://github.com/keycloak/keycloak)
+
+- `cd manifests/keycloak`, `helm dependencies build`, `helm install keycloak . -f values.yaml -n keycloak --create-namespace`
+
+* Interface d'admin : https://auth.devoxx.insee.io/auth
+* Création d'un realm `datalab`, onglet `login` activation de `User registration`
+* Création d'un client `onyxia` avec `Root URL` : `https://datalab.devoxx.insee.io`, `Valid redirect URIs` : `https://datalab.devoxx.insee.io/*` et `Web origins` : `+`
+
+Configuration d'onyxia :
+
+- `cd manifests/onyxia-oidc`, `helm dependencies build`, `helm upgrade onyxia . -f values.yaml -n onyxia`
 
 ## Stockage S3
 
 ### `Théorie`
 
-- Fred : intérêt du stockage S3
+Intérêt du stockage S3 (F)
 
 ### `Pratique`
 
-Installation minIO et utilisation dans Onyxia
+Installation d'un [minIO](https://github.com/minio/minio)
+
+- `cd manifests/minio`, `helm dependencies build`, `helm install minio . -f values.yaml -n minio --create-namespace`
+- Utilisation de [mc](https://min.io/download#/linux)
+- `mc alias set devoxx https://minio.devoxx.insee.io admin changeme`
+- `mc admin info devoxx`
+- `mc ls devoxx`  
+
+Authentification OpenIDConnect :  
+* Création d'un client `minio`, `Root URL` : `https://minio.devoxx.insee.io`, `Valid redirect URIs` : `https://minio.devoxx.insee.io/*` et `https://minio-console.devoxx.insee.io/*`, `Web origins` : `+`  
+* Ajout d'un mapper pour ce client : `clients` => `minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :  
+    * Name: `stsonly`
+    * Token claim name: `policy`
+    * Claim value : `stsonly`  
+Console disponible sur [https://minio-console.devoxx.insee.io](https://minio-console.devoxx.insee.io)  
+
+Intégration avec Onyxia :  
+* Création d'un client `onyxia-minio`, `Root URL` : `https://datalab.devoxx.insee.io`, `Valid redirect URIs` : `https://datalab.devoxx.insee.io/*`, `Web origins` : `+`  
+* Ajout d'un mapper pour ce client : `clients` => `onyxia-minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :  
+    * Name: `stsonly`
+    * Token claim name: `policy`
+    * Claim value : `stsonly`  
+* Ajout d'une audience spécifique pour ce client : `clients` => `onyxia-minio` => `client scopes` => `onyxia-minio-dedicated` => `add mapper by configuration` => `audience` :  
+    * Name: `audience-minio`
+    * Included Custom Audience : `minio`
+    * Add to ID token: `true`
+* `cd manifests/onyxia-s3-minio`, `helm dependencies build`, `helm upgrade onyxia . -f values.yaml -n onyxia`  
+
+Minio intégré dans Onyxia :)
 
 ## Catalogue
 
 ### `Théorie`
 
-- Jo : fonctionnement du catalogue
+Fonctionnement du catalogue (J)
 
 ### `Pratique`
 
 Création et utilisation d'un catalogue maison
+
+## Vault
+
+### `Théorie`
+
+Gestion des secrets
+
+### `Pratique`
+
+Installation et configuration de vault

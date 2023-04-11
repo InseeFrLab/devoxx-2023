@@ -1,8 +1,4 @@
 jupyter:
   ingress:
     enabled: true
-    rules:
-      - host: jupyter.devoxx.insee.io
-    tls:
-      - hosts:
-          - jupyter.devoxx.insee.io
+    hostname: jupyter.devoxx.insee.io

@@ -2,10 +2,36 @@ keycloakx:
   ingress:
     enabled: true
     rules:
-      - host: testdevoxx.lab.sspcloud.fr
+      - host: auth.devoxx.insee.io
         paths:
           - path: /
             pathType: Prefix
     tls:
       - hosts:
-          - testdevoxx.lab.sspcloud.fr
+          - auth.devoxx.insee.io
+  command:
+    - "/opt/keycloak/bin/kc.sh"
+    - "start"
+    - "--http-enabled=true"
+    - "--http-port=8080"
+    - "--hostname-strict=false"
+    - "--hostname-strict-https=false"
+  extraEnv: |
+    - name: KEYCLOAK_ADMIN
+      value: admin
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: Fu38b32YnjTM1t5wJa3h
+    - name: JAVA_OPTS_APPEND
+      value: >-
+        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless -Dkeycloak.profile=preview
+  rbac:
+    create: true
+    rules:
+      # RBAC rules for KUBE_PING
+      - apiGroups:
+          - ""
+        resources:
+          - pods
+        verbs:
+          - get
+          - list

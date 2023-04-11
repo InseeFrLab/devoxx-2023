@@ -1,29 +1,29 @@
 minio:
+  rootUser: admin
+  rootPassword: G3PJwYC467pdsuzng154bEsDom
+  mode: standalone
   persistence:
     size: 1Gi
+  resources:
+    requests:
+      memory: 512Mi
   ingress:
     enabled: true
-    rules:
-      - host: minio.devoxx.insee.io
-        paths:
-          - path: /
-            pathType: Prefix
+    hosts:
+      - minio.devoxx.insee.io
     tls:
       - hosts:
           - minio.devoxx.insee.io
   consoleIngress:
     enabled: true
-    rules:
-      - host: minio-console.devoxx.insee.io
-        paths:
-          - path: /
-            pathType: Prefix
+    hosts:
+      - minio-console.devoxx.insee.io
     tls:
       - hosts:
           - minio-console.devoxx.insee.io
   oidc:
     enabled: true
-    configUrl: "https://auth.devoxx.insee.io/.well-known/openid-configuration"
+    configUrl: "https://auth.devoxx.insee.io/auth/realms/datalab/.well-known/openid-configuration"
     clientId: "minio"
     clientSecret: ""
     claimName: "policy"

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: onyxia-brut
+version: 1.0.0
+dependencies:
+  - name: onyxia
+    version: 3.8.3
+    repository: https://inseefrlab.github.io/helm-charts

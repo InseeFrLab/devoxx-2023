@@ -1,0 +1,9 @@
+ingress-nginx:
+  controller:
+    watchIngressWithoutClass: true
+    extraArgs:
+      default-ssl-certificate: ingress-nginx/wildcard
+    config:
+      proxy-buffer-size: "128k" # see https://stackoverflow.com/a/68811151
+  rbac:
+    create: true
