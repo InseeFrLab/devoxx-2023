@@ -1,10 +1,26 @@
 # Construisons ensemble de A à Z un cloud opensource pour le datascientist
 
+Plan de jeu :
+
+1. [Provisionner un cluster Kubernetes](#provisionner-un-cluster-kubernetes)
+2. [Prise en main "admin" du cluster](#prise-en-main-admin-du-cluster)
+3. [Datascience 101 : déploiement d'un service](#datascience-101--déploiement-dun-service)
+4. [Packaging, reproductibilité et configuration : Helm](#packaging-reproductibilité-et-configuration--helm)
+5. [Exposition des services vers l'extérieur](#exposition-des-services-vers-lextérieur)  
+6. [Bilan d'étape](#bilan-détape)  
+7. [Onyxia, notre sauveur](#onyxia-notre-sauveur)  
+8. [Installation d'Onyxia](#installation-donyxia)  
+9. [Multi utilisateurs : authentification](#multi-users--authentification)  
+10. [Stockage S3](#stockage-s3)  
+11. [Catalogue de services](#catalogue-de-services)  
+12. [Gestion des secrets](#gestion-des-secrets)  
+13. [Customisation](#customisation)
+
 ## Contexte et objectif
 
 https://minio.lab.sspcloud.fr/projet-onyxia/diffusion/Presentation/devoxx-intro.pdf
 
-## Provisionner un cluster kube
+## Provisionner un cluster Kubernetes
 
 ### `Théorie`
 
@@ -128,7 +144,7 @@ Vidéo + présentation de l'appli + démo sspcloud (J)
 - ...
 - `https://datalab.devoxx.insee.io`
 
-## Multi users : authentification
+## Multi utilisateurs : authentification
 
 ### `Théorie`
 
@@ -187,18 +203,28 @@ Intégration avec Onyxia :
 
 Minio intégré dans Onyxia :)
 
-## Catalogue
+## Catalogue de services
 
 ### `Théorie`
 
 Fonctionnement du catalogue (J)
 
-## Vault
+## Gestion des secrets
 
 ### `Théorie`
 
-Gestion des secrets (F)
+La gestion des secrets avec Vault (F)
 
 ### `Pratique`
 
 https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#configuring-keycloak-for-vault
+
+## Customisation
+
+### `Théorie`
+
+Design, cohérence de l'expérience utilisateur ... (J)
+
+### `Pratique`
+
+https://www.keycloakify.dev/
