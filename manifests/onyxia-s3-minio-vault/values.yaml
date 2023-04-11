@@ -32,7 +32,7 @@ onyxia:
               "groupNamespacePrefix": "projet-",
               "groupPrefix": "oidc-",
               "authenticationMode": "admin",
-              "expose": { "domain": "lab.my-domain.net" },
+              "expose": { "domain": "devoxx.insee.io" },
               "monitoring": { "URLPattern": "todo" },
               "cloudshell":
                 {
