@@ -114,7 +114,7 @@ Une adresse IP c'est bien, un nom de domaine c'est mieux
 
 ### `Théorie`
 
-- `HTTP` brut en 2023 :vomit:
+- `HTTP` brut en 2023 :vomiting_face:
 - 2 approches : `cert-manager` et `wildcard`
 
 ### `Pratique`
