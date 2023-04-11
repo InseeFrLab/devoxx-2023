@@ -2,7 +2,7 @@
 
 ## Contexte et objectif
 
-Fred : présentation du contexte
+https://minio.lab.sspcloud.fr/projet-onyxia/diffusion/Presentation/devoxx-intro.pdf
 
 ## Provisionner un cluster kube
 
@@ -162,27 +162,28 @@ Installation d'un [minIO](https://github.com/minio/minio)
 - Utilisation de [mc](https://min.io/download#/linux)
 - `mc alias set devoxx https://minio.devoxx.insee.io admin changeme`
 - `mc admin info devoxx`
-- `mc ls devoxx`  
+- `mc ls devoxx`
 
-Authentification OpenIDConnect :  
-* Création d'un client `minio`, `Root URL` : `https://minio.devoxx.insee.io`, `Valid redirect URIs` : `https://minio.devoxx.insee.io/*` et `https://minio-console.devoxx.insee.io/*`, `Web origins` : `+`  
-* Ajout d'un mapper pour ce client : `clients` => `minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :  
-    * Name: `stsonly`
-    * Token claim name: `policy`
-    * Claim value : `stsonly`  
-Console disponible sur [https://minio-console.devoxx.insee.io](https://minio-console.devoxx.insee.io)  
+Authentification OpenIDConnect :
 
-Intégration avec Onyxia :  
-* Création d'un client `onyxia-minio`, `Root URL` : `https://datalab.devoxx.insee.io`, `Valid redirect URIs` : `https://datalab.devoxx.insee.io/*`, `Web origins` : `+`  
-* Ajout d'un mapper pour ce client : `clients` => `onyxia-minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :  
-    * Name: `stsonly`
-    * Token claim name: `policy`
-    * Claim value : `stsonly`  
-* Ajout d'une audience spécifique pour ce client : `clients` => `onyxia-minio` => `client scopes` => `onyxia-minio-dedicated` => `add mapper by configuration` => `audience` :  
-    * Name: `audience-minio`
-    * Included Custom Audience : `minio`
-    * Add to ID token: `true`
-* `cd manifests/onyxia-s3-minio`, `helm dependencies build`, `helm upgrade onyxia . -f values.yaml -n onyxia`  
+- Création d'un client `minio`, `Root URL` : `https://minio.devoxx.insee.io`, `Valid redirect URIs` : `https://minio.devoxx.insee.io/*` et `https://minio-console.devoxx.insee.io/*`, `Web origins` : `+`
+- Ajout d'un mapper pour ce client : `clients` => `minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :  
+   _ Name: `stsonly`
+  _ Token claim name: `policy` \* Claim value : `stsonly`  
+  Console disponible sur [https://minio-console.devoxx.insee.io](https://minio-console.devoxx.insee.io)
+
+Intégration avec Onyxia :
+
+- Création d'un client `onyxia-minio`, `Root URL` : `https://datalab.devoxx.insee.io`, `Valid redirect URIs` : `https://datalab.devoxx.insee.io/*`, `Web origins` : `+`
+- Ajout d'un mapper pour ce client : `clients` => `onyxia-minio` => `client scopes` => `minio-dedicated` => `configure a new mapper` => `hardcoded claim` :
+  - Name: `stsonly`
+  - Token claim name: `policy`
+  - Claim value : `stsonly`
+- Ajout d'une audience spécifique pour ce client : `clients` => `onyxia-minio` => `client scopes` => `onyxia-minio-dedicated` => `add mapper by configuration` => `audience` :
+  - Name: `audience-minio`
+  - Included Custom Audience : `minio`
+  - Add to ID token: `true`
+- `cd manifests/onyxia-s3-minio`, `helm dependencies build`, `helm upgrade onyxia . -f values.yaml -n onyxia`
 
 Minio intégré dans Onyxia :)
 
@@ -192,16 +193,12 @@ Minio intégré dans Onyxia :)
 
 Fonctionnement du catalogue (J)
 
-### `Pratique`
-
-Création et utilisation d'un catalogue maison
-
 ## Vault
 
 ### `Théorie`
 
-Gestion des secrets
+Gestion des secrets (F)
 
 ### `Pratique`
 
-Installation et configuration de vault
+https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#configuring-keycloak-for-vault

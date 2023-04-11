@@ -1,0 +1,13 @@
+vault:
+  server:
+    dev:
+      enabled: true
+      # Set VAULT_DEV_ROOT_TOKEN_ID value
+      devRootToken: "root"
+    ingress:
+      enabled: true
+      hosts:
+        - host: vault.devoxx.insee.io
+      tls:
+        - hosts:
+            - vault.devoxx.insee.io

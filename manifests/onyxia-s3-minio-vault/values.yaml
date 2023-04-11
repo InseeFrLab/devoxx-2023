@@ -1,0 +1,75 @@
+onyxia:
+  ingress:
+    enabled: true
+    hosts:
+      - host: datalab.devoxx.insee.io
+    tls:
+      - hosts:
+          - datalab.devoxx.insee.io
+  serviceAccount:
+    clusterAdmin: true
+  ui:
+    env:
+      KEYCLOAK_REALM: datalab
+      KEYCLOAK_URL: https://auth.devoxx.insee.io/auth
+  api:
+    env:
+      authentication.mode: openidconnect
+      keycloak.realm: datalab
+      keycloak.auth-server-url: https://auth.devoxx.insee.io/auth
+    regions:
+      [
+        {
+          "id": "demo",
+          "name": "Demo",
+          "description": "This is a demo region, feel free to try Onyxia !",
+          "services":
+            {
+              "type": "KUBERNETES",
+              "singleNamespace": false,
+              "namespacePrefix": "user-",
+              "usernamePrefix": "oidc-",
+              "groupNamespacePrefix": "projet-",
+              "groupPrefix": "oidc-",
+              "authenticationMode": "admin",
+              "expose": { "domain": "lab.my-domain.net" },
+              "monitoring": { "URLPattern": "todo" },
+              "cloudshell":
+                {
+                  "catalogId": "inseefrlab-helm-charts-datascience",
+                  "packageName": "cloudshell",
+                },
+              "initScript": "https://inseefrlab.github.io/onyxia/onyxia-init.sh",
+            },
+          "data":
+            {
+              "S3":
+                {
+                  "type": "minio",
+                  "URL": "https://minio.devoxx.insee.io",
+                  "region": "us-east-1",
+                  "bucketPrefix": "oidc-",
+                  "groupBucketPrefix": "projet-",
+                  "bucketClaim": "preferred_username",
+                  "defaultDurationSeconds": 86400,
+                  "keycloakParams":
+                    {
+                      "URL": "https://auth.devoxx.insee.io/auth",
+                      "realm": "datalab",
+                      "clientId": "onyxia-minio",
+                    },
+                  "acceptBucketCreation": true,
+                  "monitoring": { "URLPattern": "todo" },
+                },
+            },
+          "vault":
+            {
+              "URL": "https://vault.devoxx.insee.io",
+              "kvEngine": "onyxia-kv",
+              "role": "onyxia-user",
+            },
+          "auth": { "type": "openidconnect" },
+          "location":
+            { "lat": 48.8164, "long": 2.3174, "name": "Montrouge (France)" },
+        },
+      ]

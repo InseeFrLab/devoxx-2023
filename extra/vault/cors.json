@@ -1,0 +1,4 @@
+{
+  "allowed_origins": "*",
+  "allowed_headers": "X-Custom-Header"
+}
