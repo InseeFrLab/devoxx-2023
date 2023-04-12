@@ -8,13 +8,13 @@ Plan de jeu :
 
 1. [Provisionner un cluster Kubernetes](#provisionner-un-cluster-kubernetes)
 2. [Prise en main "admin" du cluster](#prise-en-main-admin-du-cluster)
-3. [Datascience 101 : déploiement d'un service](#datascience-101--déploiement-dun-service)
-4. [Packaging, reproductibilité et configuration : Helm](#packaging-reproductibilité-et-configuration--helm)
+3. [Datascience 101: déploiement d'un service](#datascience-101--déploiement-dun-service)
+4. [Packaging, reproductibilité et configuration: Helm](#packaging-reproductibilité-et-configuration--helm)
 5. [Exposition des services vers l'extérieur](#exposition-des-services-vers-lextérieur)
 6. [Bilan d'étape](#bilan-détape)
 7. [Onyxia, notre sauveur](#onyxia-notre-sauveur)
 8. [Installation d'Onyxia](#installation-donyxia)
-9. [Multi utilisateurs : authentification](#multi-users--authentification)
+9. [Multi utilisateurs: authentification](#multi-users--authentification)
 10. [Stockage S3](#stockage-s3)
 11. [Catalogue de services](#catalogue-de-services)
 12. [Gestion des secrets](#gestion-des-secrets)
@@ -128,7 +128,19 @@ Une adresse IP c'est bien, un nom de domaine c'est mieux
 On a un cluster, accessible aux admins avec possibilité de déployer des services de façon technique.  
 **Nécessité d'industrialisation et de proposer une UX**
 
-## Onyxia, notre sauveur
+## Onyxia, notre sauveur 🙏🏻
+
+<a href="https://youtu.be/2aewcmK8kmk">
+  <img width="1712" alt="image" src="https://user-images.githubusercontent.com/6702424/231314534-2eeb1ab5-5460-4caa-b78d-55afd400c9fc.png">
+</a>
+<p align="center">
+    <br/>
+    <a https="https://www.onyxia.sh"><b>onyxia.sh</b></a>
+    <br/>
+    <br/>
+</p>
+
+
 
 Vidéo + présentation de l'appli + démo sspcloud (J)
 
