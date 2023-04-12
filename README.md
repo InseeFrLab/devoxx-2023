@@ -1,5 +1,7 @@
 # Construisons ensemble de A à Z un cloud opensource pour le datascientist
 
+Pour poser des questions pendant la conférence : https://hebdo.framapad.org/p/devoxx-2023-conf-datalab-a0cu?lang=fr
+
 ## Contexte et objectif
 
 https://minio.lab.sspcloud.fr/projet-onyxia/diffusion/Presentation/devoxx-intro.pdf
